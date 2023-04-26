@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 ####### PÓS INSTALAÇÃO FEDORA ######
+#######  Executar com sudo   #######
 #
 
 URL_FUSION_FREE="https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
@@ -33,7 +34,6 @@ TO_INSTALL=(
     p7zip-plugins
     unrar
     gparted
-    transmission
 )
 
 FLATPACK_TO_INSTALL=(
@@ -62,12 +62,6 @@ dnf -y install google-chrome-stable
 dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
 rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
 dnf install brave-keyring brave-browser
-
-### VS Code ###
-rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-dnf -y check-update
-dnf -y install code
 
 ### RPM Fusion ###
 dnf -y install $URL_FUSION_FREE
