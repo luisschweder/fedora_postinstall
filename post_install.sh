@@ -1,7 +1,6 @@
 #!/bin/sh
 #
 ####### PÓS INSTALAÇÃO FEDORA ######
-#######  Executar com sudo   #######
 #
 
 URL_FUSION_FREE="https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
@@ -22,6 +21,7 @@ TO_INSTALL=(
     elfutils-libelf-devel 
     qt5-qtx11extras
     gimp
+    git
     inkscape
     discord
     telegram-desktop
@@ -34,10 +34,13 @@ TO_INSTALL=(
     p7zip-plugins
     unrar
     gparted
+    transmission
+    zsh
 )
 
 FLATPACK_TO_INSTALL=(
     flathub com.spotify.Client
+    flathub com.discordapp.Discord
 )
 
 echo fastestmirror=true >> /etc/dnf/dnf.conf
@@ -63,6 +66,12 @@ dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86
 rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
 dnf install brave-keyring brave-browser
 
+### VS Code ###
+rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+dnf -y check-update
+dnf -y install code
+
 ### RPM Fusion ###
 dnf -y install $URL_FUSION_FREE
 rpm --import $KEY_FUSION_FREE
@@ -74,10 +83,16 @@ dnf -y install rpmfusion-nonfree-release-tainted
 ### Drivers NVidia
 dnf -y install akmod-nvidia --enablerepo=rpmfusion*
 
+### Ferramentas de desenvolvimento
+dnf groupinstall "Development Tools" "Development Libraries"
+
 ### Instalação de programas ###
 for install in ${TO_INSTALL[@]}; do
 	dnf -y install $install
 done
+
+## OH my Zsh
+wget --no-check-certificate http://install.ohmyz.sh -O - | sh
 
 ### Flatpak ###
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
