@@ -84,7 +84,7 @@ dnf -y install rpmfusion-nonfree-release-tainted
 dnf -y install akmod-nvidia --enablerepo=rpmfusion*
 
 ### Ferramentas de desenvolvimento
-dnf groupinstall "Development Tools" "Development Libraries"
+dnf -y groupinstall "Development Tools" "Development Libraries"
 
 ### Instalação de programas ###
 for install in ${TO_INSTALL[@]}; do
