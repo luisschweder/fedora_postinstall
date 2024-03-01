@@ -36,6 +36,11 @@ TO_INSTALL=(
     gparted
     transmission
     zsh
+    golang
+    python3-pip
+    podman-compose
+    rust
+    cargo
 )
 
 FLATPACK_TO_INSTALL=(
@@ -91,8 +96,20 @@ for install in ${TO_INSTALL[@]}; do
 	dnf -y install $install
 done
 
-## OH my Zsh
+### OH my Zsh ###
 wget --no-check-certificate http://install.ohmyz.sh -O - | sh
+
+### Configurações do Golang
+mkdir -p $HOME/go
+echo 'export GOPATH=$HOME/go' >> $HOME/.zshrc
+
+### Podman compose (interface para usar arquivos docker-compose no podman) ###
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+systemctl enable --now podman.socket
+systemctl status podman.socket
+pip3 install --upgrade pip
+pip install podman-compose
 
 ### Flatpak ###
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
